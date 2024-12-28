@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لعبة القائد الحربي وموسوعة الحضارة المصرية</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+    <style>
+/* General Styles */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: "Cairo", Arial, sans-serif;
+    direction: rtl;
+    background-color: #f5f5f5;
+}
+
+/* Top Navigation Bar */
+.top-bar {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #2a4d69;
+    color: white;
+    padding: 15px 0;
+    border-bottom: 4px solid #007acc;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.top-bar button {
+    background-color: #007acc;
+    border: none;
+    padding: 12px 25px;
+    color: white;
+    font-size: 1.2em;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.top-bar button:hover {
+    background-color: #005f99;
+    transform: scale(1.05);
+}
+
+/* Section Styling */
+.section {
+    display: none;
+    padding: 20px;
+    margin-top: 80px; /* Ensure content doesn't hide under fixed top bar */
+}
+
+.section.active {
+    display: block;
+}
+
+/* App Section Styling */
+#app {
+    background-color: #f9f9f9;
+    color: #333;
+    text-align: center;
+    padding: 20px;
+}
+
+#app header {
+    padding: 20px;
+    background-color: #2a4d69;
+    color: white;
+}
+
+#app header h1 {
+    font-size: 2.5em;
+    margin: 0;
+}
+
+#app header p {
+    font-size: 1.2em;
+    margin-top: 10px;
+    color: #d1ecf1;
+}
+
+.language-selector {
+    margin-top: 10px;
+}
+
+.language-selector label {
+    font-size: 1em;
+    color: #f9f9f9;
+}
+
+.language-selector select {
+    font-size: 1em;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #2a4d69;
+    color: #2a4d69;
+    background-color: #fff;
+}
+.search-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+#search-bar {
+    width: 90%;
+    max-width: 400px;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #007acc;
+    font-size: 1em;
+    text-align: right;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+#search-bar:focus {
+    border-color: #005f99;
+    outline: none;
+}
+
+
+#content-section {
+    margin-top: 20px;
+    background-color: #f1f1f1;
+    padding: 20px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 600px;
+    margin: 20px auto;
+    box-shadow: 0px 4px 8px rgba(0, 0, 51, 0.3);
+}
+
+#content-section h2 {
+    color: #2a4d69;
+}
+
+#content-section img {
+    max-width: 100%;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+/* Signup and Login Styles */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+}
+
+.auth-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 350px;
+  padding: 20px;
+  border-radius: 20px;
+  position: relative;
+  background-color: #ffffff; /* White background */
+  color: #000080; /* Dark blue text */
+  border: 1px solid #0000ff; /* Blue border */
+}
+
+.title {
+  font-size: 28px;
+  font-weight: 600;
+  letter-spacing: -1px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-left: 30px;
+  color: #0000ff; /* Bright blue for title */
+}
+
+.title::before,
+.title::after {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  left: 0px;
+  background-color: #0000ff; /* Bright blue dots */
+}
+
+.title::after {
+  animation: pulse 1s linear infinite;
+}
+
+.message, 
+.signin {
+  font-size: 14.5px;
+  color: #000080; /* Dark blue text */
+}
+
+.signin {
+  text-align: center;
+}
+
+.signin a {
+  color: #0000ff; /* Bright blue links */
+}
+
+.signin a:hover {
+  text-decoration: underline;
+}
+
+.flex {
+  display: flex;
+  width: 100%;
+  gap: 6px;
+}
+
+.form label {
+  position: relative;
+}
+
+.form label .input {
+  background-color: #e6f0ff; /* Light blue background for input */
+  color: #000080; /* Dark blue text for input */
+  width: 100%;
+  padding: 20px 5px 5px 10px;
+  outline: 0;
+  border: 1px solid #0000ff; /* Bright blue border */
+  border-radius: 10px;
+}
+
+.form label .input + span {
+  color: #000080; /* Dark blue placeholder text */
+  position: absolute;
+  left: 10px;
+  top: 0px;
+  font-size: 0.9em;
+  cursor: text;
+  transition: 0.3s ease;
+}
+
+.form label .input:placeholder-shown + span {
+  top: 12.5px;
+  font-size: 0.9em;
+}
+
+.form label .input:focus + span,
+.form label .input:valid + span {
+  color: #0000ff; /* Bright blue focus color */
+  top: 0px;
+  font-size: 0.7em;
+  font-weight: 600;
+}
+
+.input {
+  font-size: medium;
+}
+
+.submit {
+  border: none;
+  outline: none;
+  padding: 10px;
+  border-radius: 10px;
+  color: #ffffff; /* White text */
+  font-size: 16px;
+  transform: .3s ease;
+  background-color: #0000ff; /* Bright blue button */
+}
+
+.submit:hover {
+  background-color: #0000e6; /* Slightly darker blue on hover */
+}
+
+@keyframes pulse {
+  from {
+    transform: scale(0.9);
+    opacity: 1;
+  }
+
+  to {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+/* Game Section Styling */
+#game {
+    background-color: #1a1a2e;
+    color: white;
+    height: 100vh;
+    padding-top: 70px;
+}
+
+#gameCanvas {
+    display: block;
+    width: 100%;
+    height: 70%;
+    background: url('https://cdn.leonardo.ai/users/219c0453-d09b-4398-b975-2495e47ecf5e/generations/ee33a647-aeba-40c5-9de5-5e8691a9b400/Default_A_vibrant_ancient_Egyptianinspired_platformer_game_bac_0.jpg') no-repeat center center;
+    background-size: cover;
+}
+
+.controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin: 10px;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    background-color: #0055aa;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+button:hover {
+    background-color: #003f7f;
+}
+
+#restartButton {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 15px 30px;
+    background-color: red;
+    font-size: 1.5rem;
+    border-radius: 10px;
+    display: none;
+}
+
+.info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    font-size: 1.2rem;
+    background-color: #222;
+}
+
+.life-bar-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#lifeBar {
+    width: 100px;
+    height: 10px;
+    background-color: red;
+    border: 1px solid white;
+}
+
+.score-info {
+    display: flex;
+    gap: 20px;
+    font-size: 1rem;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+    #app header h1 {
+        font-size: 1.8em;
+    }
+
+    #app header p {
+        font-size: 1em;
+    }
+
+    #search-bar {
+        width: 80%;
+    }
+
+    #content-section {
+        padding: 15px;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <!-- Top navigation bar -->
+    <div class="top-bar">
+      <button class="section-button" onclick="showSection('app')">التطبيق</button>
+        <button class="section-button" onclick="showSection('game')">اللعبة</button>
+        
+        <button class="section-button" onclick="showSection('auth')">تسجيل</button>
+    </div>
+<!-- Login & Signup Section -->
+<div id="auth" class="section">
+    <div class="auth-container">
+        <div class="auth-box">
+            <!-- Signup or Signin Section -->
+            <div id="authSection">
+                <!-- Signup Form -->
+                <form class="form" id="signupForm">
+                    <p class="title">إنشاء حساب</p>
+                    <p class="message">إنشء حسابك وتمكن من التطبيق </p>
+                    <div class="flex">
+                        <label>
+                            <input class="input" type="text" id="firstname" placeholder="الاسم الأول" required>
+                            <span></span>
+                        </label>
+
+                        <label>
+                            <input class="input" type="text" id="lastname" placeholder="الاسم الثاني" required>
+                            <span></span>
+                        </label>
+                    </div>  
+
+                    <label>
+                        <input class="input" type="email" id="email" placeholder="البريد الإلكتروني" required>
+                        <span></span>
+                    </label> 
+
+                    <label>
+                        <input class="input" type="password" id="password" placeholder="رقم المرور" required>
+                        <span></span>
+                    </label>
+
+                    <label>
+                        <input class="input" type="password" id="confirmPassword" placeholder="تأكيد رقم المرور" required>
+                        <span></span>
+                    </label>
+                    
+                    <button type="button" class="submit" onclick="signup()">إنشاء</button>
+                    <p class="signin">لديك حساب مسبق بالفعل ؟ 
+                    <a href="#" onclick="showSignin()">تسجيل الدخول</a></p>
+                </form>
+
+                <!-- Signin Form -->
+                <form class="form" id="signinForm" style="display: none;">
+                    <p class="title">تسجيل الدخول</p>
+                    <p class="message">مرحبا من جديد لو سمحت يرجى تسجيل الدخول للتمكن من التطبيق</p>
+
+                    <label>
+                        <input class="input" type="email" id="signinEmail" placeholder="البريد الإلكتروني" required>
+                        <span></span>
+                    </label>
+
+                    <label>
+                        <input class="input" type="password" id="signinPassword" placeholder="رقم المرور" required>
+                        <span></span>
+                    </label>
+
+                    <button type="button" class="submit" onclick="signin()">سجل الدخول</button>
+                    <p class="signin">ليس لديك حساب ؟  
+                    <a href="#" onclick="showSignup()">إنشاء حساب</a></p>
+                </form>
+
+                <!-- Logout Option -->
+                <div id="logoutOption" style="display: none;">
+                    <p>انت في قيد تسجيل الدخول</p>
+                    <button class="submit" onclick="logout()">تسجيل الخروج</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Game Section -->
+    <div id="game" class="section">
+        <div class="game-container">
+            <canvas id="gameCanvas"></canvas>
+            <div class="controls">
+                <button id="upButton">⬆</button>
+                <div>
+                    <button id="leftButton">⬅</button>
+                    <button id="shootButton">🔫</button>
+                    <button id="rightButton">➡</button>
+                </div>
+                <button id="downButton">⬇</button>
+            </div>
+            <div class="info">
+                <div class="life-bar-container">
+                    <span>الشريط الصحي:</span>
+                    <div id="lifeBar"></div>
+                </div>
+                <div class="score-info">
+                    <span id="scoreDisplay">النتيجة: 0</span>
+                    <span id="requiredScore">النتيجة المطلوبة: 5</span>
+                </div>
+            </div>
+            <button id="restartButton" style="display: none;">إعادة تشغيل</button>
+        </div>
+    </div>
+
+    <!-- App Section -->
+    <div id="app" class="section">
+        <header>
+            <div id="top-message">Free Palestine فلسطين في القلب 🇵🇸</div>
+            <h1 id="main-title">موسوعة الحضارة المصرية</h1>
+            <p id="main-subtitle">🇪🇬 مصر - تاريخ، حضارة، وثقافة</p>
+            <div class="language-selector">
+                <label for="language" id="language-label">اختر اللغة:</label>
+                <select id="language" onchange="changeLanguage()">
+                    <option value="ar">العربية</option>
+                    <option value="en">English</option>
+                </select>
+            </div>
+        </header>
+        <main>
+            <section class="introduction">
+                <h2 id="introduction-title">لمحة عن الحضارة المصرية القديمة</h2>
+                <div class
+class="search-container">
+                    <input type="text" id="search-bar" placeholder="ابحث عن التاريخ المصري...">
+                    <button id="search-button" onclick="fetchContent()">ابحث</button>
+                </div>
+            </section>
+            <section id="content-section">
+                <!-- سيتم تحميل المعلومات هنا -->
+
+            <section class="youtube-videos" id="youtube-videos">
+                <!-- سيتم عرض فيديوهات اليوتيوب هنا -->
+            </section>
+        </main>
+        <footer>
+            <p>جميع الحقوق محفوظة &copy; 2024 - موسوعة الحضارة المصرية</p>
+        </footer>
+    </div>
+
+    <script>
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+        }
+
+        // Show Signup Form
+function showSignup() {
+    document.getElementById('signupForm').style.display = 'block';
+    document.getElementById('signinForm').style.display = 'none';
+    document.getElementById('logoutOption').style.display = 'none';
+}
+
+// Show Signin Form
+function showSignin() {
+    document.getElementById('signupForm').style.display = 'none';
+    document.getElementById('signinForm').style.display = 'block';
+    document.getElementById('logoutOption').style.display = 'none';
+}
+
+// Signup functionality
+function signup() {
+    // Get the values from the signup form
+    const firstname = document.getElementById('firstname').value;
+    const lastname = document.getElementById('lastname').value;
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+
+    // Check if passwords match
+    if (password !== confirmPassword) {
+        alert('Passwords do not match!');
+        return;
+    }
+
+    // Simple email validation
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    if (!emailPattern.test(email)) {
+        alert('Please enter a valid email address!');
+        return;
+    }
+
+    // Simulate successful signup
+    alert('Registration successful!');
+    document.getElementById('signupForm').style.display = 'none';
+    document.getElementById('logoutOption').style.display = 'block';
+}
+
+// Signin functionality
+function signin() {
+    // Get the values from the signin form
+    const email = document.getElementById('signinEmail').value;
+    const password = document.getElementById('signinPassword').value;
+
+    // Simple email validation
+    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    if (!emailPattern.test(email)) {
+        alert('Please enter a valid email address!');
+        return;
+    }
+
+    // Simple password validation (check if it's not empty)
+    if (password.trim() === '') {
+        alert('Please enter a password!');
+        return;
+    }
+
+    // Simulate successful signin
+    alert('Login successful!');
+    document.getElementById('signinForm').style.display = 'none';
+    document.getElementById('logoutOption').style.display = 'block';
+}
+
+// Logout functionality
+function logout() {
+    alert('You have logged out!');
+    document.getElementById('logoutOption').style.display = 'none';
+    showSignin(); // Go back to signin screen after logout
+}
+    </script>
+</body>
+</html>
