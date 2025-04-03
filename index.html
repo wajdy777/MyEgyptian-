@@ -1,622 +1,1012 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لعبة القائد الحربي وموسوعة الحضارة المصرية</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="script.js" defer></script>
-    <style>
-/* General Styles */
-body {
-    margin: 0;
-    padding: 0;
-    font-family: "Cairo", Arial, sans-serif;
-    direction: rtl;
-    background-color: #f5f5f5;
-}
-
-/* Top Navigation Bar */
-.top-bar {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    background-color: #2a4d69;
-    color: white;
-    padding: 15px 0;
-    border-bottom: 4px solid #007acc;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
-}
-
-.top-bar button {
-    background-color: #007acc;
-    border: none;
-    padding: 12px 25px;
-    color: white;
-    font-size: 1.2em;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.top-bar button:hover {
-    background-color: #005f99;
-    transform: scale(1.05);
-}
-
-/* Section Styling */
-.section {
-    display: none;
-    padding: 20px;
-    margin-top: 80px; /* Ensure content doesn't hide under fixed top bar */
-}
-
-.section.active {
-    display: block;
-}
-
-/* App Section Styling */
-#app {
-    background-color: #f9f9f9;
-    color: #333;
-    text-align: center;
-    padding: 20px;
-}
-
-#app header {
-    padding: 20px;
-    background-color: #2a4d69;
-    color: white;
-}
-
-#app header h1 {
-    font-size: 2.5em;
-    margin: 0;
-}
-
-#app header p {
-    font-size: 1.2em;
-    margin-top: 10px;
-    color: #d1ecf1;
-}
-
-.language-selector {
-    margin-top: 10px;
-}
-
-.language-selector label {
-    font-size: 1em;
-    color: #f9f9f9;
-}
-
-.language-selector select {
-    font-size: 1em;
-    padding: 5px;
-    border-radius: 5px;
-    border: 1px solid #2a4d69;
-    color: #2a4d69;
-    background-color: #fff;
-}
-.search-container {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: center;
-}
-
-#search-bar {
-    width: 90%;
-    max-width: 400px;
-    padding: 10px;
-    border-radius: 5px;
-    border: 1px solid #007acc;
-    font-size: 1em;
-    text-align: right;
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-#search-bar:focus {
-    border-color: #005f99;
-    outline: none;
-}
-
-
-#content-section {
-    margin-top: 20px;
-    background-color: #f1f1f1;
-    padding: 20px;
-    border-radius: 8px;
-    width: 90%;
-    max-width: 600px;
-    margin: 20px auto;
-    box-shadow: 0px 4px 8px rgba(0, 0, 51, 0.3);
-}
-
-#content-section h2 {
-    color: #2a4d69;
-}
-
-#content-section img {
-    max-width: 100%;
-    border-radius: 8px;
-    margin-top: 10px;
-}
-
-/* Signup and Login Styles */
-.auth-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #f4f4f4;
-}
-
-.auth-box {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  max-width: 350px;
-  padding: 20px;
-  border-radius: 20px;
-  position: relative;
-  background-color: #ffffff; /* White background */
-  color: #000080; /* Dark blue text */
-  border: 1px solid #0000ff; /* Blue border */
-}
-
-.title {
-  font-size: 28px;
-  font-weight: 600;
-  letter-spacing: -1px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  padding-left: 30px;
-  color: #0000ff; /* Bright blue for title */
-}
-
-.title::before,
-.title::after {
-  position: absolute;
-  content: "";
-  height: 16px;
-  width: 16px;
-  border-radius: 50%;
-  left: 0px;
-  background-color: #0000ff; /* Bright blue dots */
-}
-
-.title::after {
-  animation: pulse 1s linear infinite;
-}
-
-.message, 
-.signin {
-  font-size: 14.5px;
-  color: #000080; /* Dark blue text */
-}
-
-.signin {
-  text-align: center;
-}
-
-.signin a {
-  color: #0000ff; /* Bright blue links */
-}
-
-.signin a:hover {
-  text-decoration: underline;
-}
-
-.flex {
-  display: flex;
-  width: 100%;
-  gap: 6px;
-}
-
-.form label {
-  position: relative;
-}
-
-.form label .input {
-  background-color: #e6f0ff; /* Light blue background for input */
-  color: #000080; /* Dark blue text for input */
-  width: 100%;
-  padding: 20px 5px 5px 10px;
-  outline: 0;
-  border: 1px solid #0000ff; /* Bright blue border */
-  border-radius: 10px;
-}
-
-.form label .input + span {
-  color: #000080; /* Dark blue placeholder text */
-  position: absolute;
-  left: 10px;
-  top: 0px;
-  font-size: 0.9em;
-  cursor: text;
-  transition: 0.3s ease;
-}
-
-.form label .input:placeholder-shown + span {
-  top: 12.5px;
-  font-size: 0.9em;
-}
-
-.form label .input:focus + span,
-.form label .input:valid + span {
-  color: #0000ff; /* Bright blue focus color */
-  top: 0px;
-  font-size: 0.7em;
-  font-weight: 600;
-}
-
-.input {
-  font-size: medium;
-}
-
-.submit {
-  border: none;
-  outline: none;
-  padding: 10px;
-  border-radius: 10px;
-  color: #ffffff; /* White text */
-  font-size: 16px;
-  transform: .3s ease;
-  background-color: #0000ff; /* Bright blue button */
-}
-
-.submit:hover {
-  background-color: #0000e6; /* Slightly darker blue on hover */
-}
-
-@keyframes pulse {
-  from {
-    transform: scale(0.9);
-    opacity: 1;
-  }
-
-  to {
-    transform: scale(1.8);
-    opacity: 0;
-  }
-}
-
-/* Game Section Styling */
-#game {
-    background-color: #1a1a2e;
-    color: white;
-    height: 100vh;
-    padding-top: 70px;
-}
-
-#gameCanvas {
-    display: block;
-    width: 100%;
-    height: 70%;
-    background: url('https://cdn.leonardo.ai/users/219c0453-d09b-4398-b975-2495e47ecf5e/generations/ee33a647-aeba-40c5-9de5-5e8691a9b400/Default_A_vibrant_ancient_Egyptianinspired_platformer_game_bac_0.jpg') no-repeat center center;
-    background-size: cover;
-}
-
-.controls {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    margin: 10px;
-}
-
-button {
-    padding: 10px 20px;
-    font-size: 1.2rem;
-    background-color: #0055aa;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-button:active {
-    transform: scale(0.95);
-}
-
-button:hover {
-    background-color: #003f7f;
-}
-
-#restartButton {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    padding: 15px 30px;
-    background-color: red;
-    font-size: 1.5rem;
-    border-radius: 10px;
-    display: none;
-}
-
-.info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    font-size: 1.2rem;
-    background-color: #222;
-}
-
-.life-bar-container {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-#lifeBar {
-    width: 100px;
-    height: 10px;
-    background-color: red;
-    border: 1px solid white;
-}
-
-.score-info {
-    display: flex;
-    gap: 20px;
-    font-size: 1rem;
-}
-
-/* Responsive Adjustments */
-@media (max-width: 600px) {
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>موسوعة الحضارة المصرية</title>
+  <style>
+    /* GENERAL STYLES */
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Cairo", Arial, sans-serif;
+      direction: rtl;
+      background-color: #f5f5f5;
+      color: #333;
+      transition: background-color 0.5s, color 0.5s;
+    }
+    /* FIXED TOP NAVIGATION BAR */
+    .top-bar {
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      background-color: #2a4d69;
+      color: white;
+      padding: 15px 0;
+      border-bottom: 4px solid #007acc;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 1000;
+      animation: slideInDown 0.8s;
+    }
+    @keyframes slideInDown {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    /* OLD-STYLE BUTTONS */
+    .old-style-button {
+      background-color: #e0e0e0;
+      border: 2px outset #999;
+      color: #000;
+      font-family: "Courier New", monospace;
+      padding: 8px 16px;
+      margin: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.3s;
+      outline: none;
+    }
+    .old-style-button:active {
+      border-style: inset;
+    }
+    .top-bar button:hover {
+      background-color: #d0d0d0;
+      transform: scale(1.05);
+    }
+    /* SECTION STYLING */
+    .section {
+      display: none;
+      padding: 20px;
+      margin-top: 80px;
+      animation: fadeIn 0.5s;
+    }
+    .section.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    /* APP SECTION STYLING */
+    #app {
+      background-color: #f9f9f9;
+      color: #333;
+      text-align: center;
+      padding: 20px;
+      position: relative;
+    }
+    #app header {
+      padding: 20px;
+      background-color: #2a4d69;
+      color: white;
+      position: relative;
+      animation: fadeInDown 0.8s;
+    }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
     #app header h1 {
-        font-size: 1.8em;
+      font-size: 2.5em;
+      margin: 0;
     }
-
     #app header p {
-        font-size: 1em;
+      font-size: 1.2em;
+      margin-top: 10px;
+      color: #d1ecf1;
     }
-
-    #search-bar {
-        width: 80%;
+    /* Blue Box with Flags, Theme & Language Switcher */
+    #top-message {
+      background-color: #2a4d69;
+      color: white;
+      padding: 10px;
+      margin-top: 0; /* flush with top bar */
+      border-bottom-left-radius: 12px;
+      border-bottom-right-radius: 12px;
     }
-
+    .flag-icons img {
+      width: 30px;
+      vertical-align: middle;
+      margin: 0 5px;
+    }
+    .language-selector {
+      margin-top: 10px;
+      animation: fadeIn 1s;
+    }
+    .language-selector label {
+      font-size: 1em;
+      color: #f9f9f9;
+    }
+    .language-selector select {
+      font-size: 1em;
+      padding: 5px;
+      border-radius: 5px;
+      border: 1px solid #2a4d69;
+      color: #2a4d69;
+      background-color: #fff;
+    }
+    /* Center the Article Heading and Images */
     #content-section {
-        padding: 15px;
+      text-align: center;
     }
-}
-
-    </style>
+    #content-section h2 {
+      text-align: center;
+    }
+    #content-section img {
+      display: block;
+      margin: 0 auto;
+    }
+    /* Theme Toggle Button */
+    #themeToggle {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      padding: 8px;
+      font-size: 1.8em;
+      border: none;
+      border-radius: 50%;
+      cursor: pointer;
+      background-color: transparent;
+      color: white;
+      transition: transform 0.5s;
+      outline: none;
+      -webkit-appearance: none;
+    }
+    #themeToggle:hover,
+    #themeToggle:focus {
+      transform: rotate(360deg);
+    }
+    /* Settings Gear */
+    #settingsToggle {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      padding: 8px;
+      font-size: 1.8em;
+      border: none;
+      border-radius: 0;
+      cursor: pointer;
+      background: none;
+      color: white;
+      transition: transform 0.5s;
+      outline: none;
+      -webkit-appearance: none;
+    }
+    #settingsToggle:hover,
+    #settingsToggle:focus {
+      transform: rotate(-360deg);
+    }
+    /* Settings Panel (Styled like in your index.html sample) */
+    #settingsPanel {
+      position: absolute;
+      top: 50px;
+      right: 10px;
+      background-color: #fff;
+      border: 2px solid #007acc;
+      border-radius: 12px;
+      padding: 10px;
+      display: none;
+      animation: fadeInDown 0.5s ease;
+      z-index: 1500;
+      min-width: 180px;
+    }
+    #settingsPanel p {
+      margin: 5px 0;
+      font-family: "Courier New", monospace;
+    }
+    .speed-option {
+      background-color: #e0e0e0;
+      border: 2px outset #999;
+      color: #000;
+      font-family: "Courier New", monospace;
+      padding: 5px 10px;
+      margin: 3px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.3s;
+      outline: none;
+      display: inline-block;
+    }
+    .speed-option.active,
+    .speed-option:hover {
+      background-color: #d0d0d0;
+      transform: scale(1.1);
+    }
+    /* Left Sidebar (Chats) */
+    .layout__sidebar--left {
+      max-width: 250px;
+      background: #f2f2f2;
+      color: #000;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      transition: max-width 0.5s, padding 0.5s, opacity 0.5s;
+    }
+    .layout__sidebar--left.collapsed {
+      max-width: 0;
+      padding: 0;
+      opacity: 0;
+      overflow: hidden;
+    }
+    @media (max-width: 768px) {
+      .layout__sidebar--left {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        max-width: 0;
+        padding: 0;
+        opacity: 0;
+      }
+      .layout__sidebar--left.active {
+        max-width: 250px;
+        padding: 20px;
+        opacity: 1;
+        z-index: 150;
+      }
+    }
+    /* Input Area */
+    .input-area {
+      position: relative;
+      margin: 20px;
+    }
+    .input-area textarea {
+      width: 100%;
+      resize: none;
+      padding: 12px 90px 12px 12px;
+      font-size: 1rem;
+      border: 1px solid #ccc;
+      outline: none;
+      border-radius: 20px;
+      transition: border 0.3s;
+    }
+    .input-area textarea:focus {
+      border-color: var(--accent-blue);
+      box-shadow: 0 0 8px var(--accent-blue);
+    }
+    .input-buttons {
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      gap: 10px;
+    }
+    /* Controls Bar */
+    .controls {
+      display: flex;
+      justify-content: center;
+      padding: 10px 20px;
+      gap: 20px;
+      background: var(--control-bg);
+      border-top: 1px solid #ccc;
+    }
+    /* Content Section (Article) */
+    #content-section {
+      margin-top: 20px;
+      background-color: #f1f1f1;
+      padding: 20px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      text-align: center;
+      box-shadow: 0px 4px 8px rgba(0, 0, 51, 0.3);
+      transition: background-color 0.5s, color 0.5s;
+    }
+    #content-section h2 {
+      text-align: center;
+    }
+    #content-section img {
+      display: block;
+      margin: 10px auto;
+      border-radius: 8px;
+    }
+    /* Search History Section */
+    #history {
+      background-color: #f1f1f1;
+      padding: 20px;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 600px;
+      margin: 20px auto;
+      box-shadow: 0 4px 8px rgba(0, 0, 51, 0.3);
+      text-align: left;
+      transition: background-color 0.5s, color 0.5s;
+    }
+    #history h2 {
+      color: #2a4d69;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    #history input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border: 1px solid #007acc;
+      text-align: center;
+    }
+    #history ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    #history li {
+      padding: 5px;
+      border-bottom: 1px solid #ccc;
+      cursor: pointer;
+      text-align: center;
+    }
+    #history li:hover {
+      background-color: #e0e0e0;
+    }
+    /* Mobile Responsiveness */
+    @media (max-width: 600px) {
+      #app header h1 { font-size: 1.8em; }
+      .input-area textarea { padding: 10px 80px 10px 10px; }
+      .controls button { width: 40px; height: 40px; }
+    }
+  </style>
 </head>
 <body>
-    <!-- Top navigation bar -->
-    <div class="top-bar">
-      <button class="section-button" onclick="showSection('app')">التطبيق</button>
-        <button class="section-button" onclick="showSection('game')">اللعبة</button>
-        
-        <button class="section-button" onclick="showSection('auth')">تسجيل</button>
-    </div>
-<!-- Login & Signup Section -->
-<div id="auth" class="section">
+  <!-- TOP NAVIGATION BAR -->
+  <div class="top-bar">
+    <button id="btnApp" class="old-style-button" onclick="showSection('app')">التطبيق</button>
+    <button id="btnGame" class="old-style-button" onclick="showSection('game')">اللعبة</button>
+    <button id="btnAuth" class="old-style-button" onclick="showSection('auth')">تسجيل</button>
+  </div>
+  <!-- AUTH SECTION -->
+  <div id="auth" class="section">
+    <!-- (Authentication forms remain unchanged) -->
     <div class="auth-container">
-        <div class="auth-box">
-            <!-- Signup or Signin Section -->
-            <div id="authSection">
-                <!-- Signup Form -->
-                <form class="form" id="signupForm">
-                    <p class="title">إنشاء حساب</p>
-                    <p class="message">إنشء حسابك وتمكن من التطبيق </p>
-                    <div class="flex">
-                        <label>
-                            <input class="input" type="text" id="firstname" placeholder="الاسم الأول" required>
-                            <span></span>
-                        </label>
-
-                        <label>
-                            <input class="input" type="text" id="lastname" placeholder="الاسم الثاني" required>
-                            <span></span>
-                        </label>
-                    </div>  
-
-                    <label>
-                        <input class="input" type="email" id="email" placeholder="البريد الإلكتروني" required>
-                        <span></span>
-                    </label> 
-
-                    <label>
-                        <input class="input" type="password" id="password" placeholder="رقم المرور" required>
-                        <span></span>
-                    </label>
-
-                    <label>
-                        <input class="input" type="password" id="confirmPassword" placeholder="تأكيد رقم المرور" required>
-                        <span></span>
-                    </label>
-                    
-                    <button type="button" class="submit" onclick="signup()">إنشاء</button>
-                    <p class="signin">لديك حساب مسبق بالفعل ؟ 
-                    <a href="#" onclick="showSignin()">تسجيل الدخول</a></p>
-                </form>
-
-                <!-- Signin Form -->
-                <form class="form" id="signinForm" style="display: none;">
-                    <p class="title">تسجيل الدخول</p>
-                    <p class="message">مرحبا من جديد لو سمحت يرجى تسجيل الدخول للتمكن من التطبيق</p>
-
-                    <label>
-                        <input class="input" type="email" id="signinEmail" placeholder="البريد الإلكتروني" required>
-                        <span></span>
-                    </label>
-
-                    <label>
-                        <input class="input" type="password" id="signinPassword" placeholder="رقم المرور" required>
-                        <span></span>
-                    </label>
-
-                    <button type="button" class="submit" onclick="signin()">سجل الدخول</button>
-                    <p class="signin">ليس لديك حساب ؟  
-                    <a href="#" onclick="showSignup()">إنشاء حساب</a></p>
-                </form>
-
-                <!-- Logout Option -->
-                <div id="logoutOption" style="display: none;">
-                    <p>انت في قيد تسجيل الدخول</p>
-                    <button class="submit" onclick="logout()">تسجيل الخروج</button>
-                </div>
+      <div class="auth-box">
+        <div id="authSection">
+          <form class="form" id="signupForm">
+            <p id="signupTitle" class="title">إنشاء حساب</p>
+            <p id="signupMessage" class="message">أنشئ حسابك وتمكن من التطبيق</p>
+            <div class="flex">
+              <label>
+                <input class="input" type="text" id="firstname" placeholder="الاسم الأول" required>
+                <span></span>
+              </label>
+              <label>
+                <input class="input" type="text" id="lastname" placeholder="الاسم الثاني" required>
+                <span></span>
+              </label>
             </div>
+            <label>
+              <input class="input" type="email" id="email" placeholder="البريد الإلكتروني" required>
+              <span></span>
+            </label>
+            <label>
+              <input class="input" type="password" id="password" placeholder="رقم المرور" required>
+              <span></span>
+            </label>
+            <label>
+              <input class="input" type="password" id="confirmPassword" placeholder="تأكيد رقم المرور" required>
+              <span></span>
+            </label>
+            <button type="button" class="submit" onclick="signup()">إنشاء</button>
+            <p class="signin">هل لديك حساب بالفعل؟ 
+              <a href="#" onclick="showSignin()">تسجيل الدخول</a>
+            </p>
+          </form>
+          <form class="form" id="signinForm" style="display: none;">
+            <p id="signinTitle" class="title">تسجيل الدخول</p>
+            <p id="signinMessage" class="message">مرحبًا من جديد! يرجى تسجيل الدخول للتمكن من التطبيق</p>
+            <label>
+              <input class="input" type="email" id="signinEmail" placeholder="البريد الإلكتروني" required>
+              <span></span>
+            </label>
+            <label>
+              <input class="input" type="password" id="signinPassword" placeholder="رقم المرور" required>
+              <span></span>
+            </label>
+            <button type="button" class="submit" onclick="signin()">سجل الدخول</button>
+            <p class="signin">ليس لديك حساب؟  
+              <a href="#" onclick="showSignup()">إنشاء حساب</a>
+            </p>
+          </form>
+          <div id="logoutOption" style="display: none;">
+            <p id="logoutMessage">أنت مسجل</p>
+            <button class="submit" onclick="logout()">تسجيل الخروج</button>
+          </div>
         </div>
+      </div>
     </div>
-</div>
-
-    <!-- Game Section -->
-    <div id="game" class="section">
-        <div class="game-container">
-            <canvas id="gameCanvas"></canvas>
-            <div class="controls">
-                <button id="upButton">⬆</button>
-                <div>
-                    <button id="leftButton">⬅</button>
-                    <button id="shootButton">🔫</button>
-                    <button id="rightButton">➡</button>
-                </div>
-                <button id="downButton">⬇</button>
-            </div>
-            <div class="info">
-                <div class="life-bar-container">
-                    <span>الشريط الصحي:</span>
-                    <div id="lifeBar"></div>
-                </div>
-                <div class="score-info">
-                    <span id="scoreDisplay">النتيجة: 0</span>
-                    <span id="requiredScore">النتيجة المطلوبة: 5</span>
-                </div>
-            </div>
-            <button id="restartButton" style="display: none;">إعادة تشغيل</button>
+  </div>
+  <!-- APP SECTION -->
+  <div id="app" class="section">
+    <header>
+      <button id="themeToggle" onclick="toggleTheme()">🌙</button>
+      <button id="settingsToggle" class="old-style-button">⚙</button>
+      <!-- Settings Panel (matches index.html style) -->
+      <div id="settingsPanel">
+        <p id="settingsText">سرعة القراءة:</p>
+        <div id="userInfo" style="margin-bottom:8px;"></div>
+        <button class="speed-option" data-speed="0.5">0.5x</button>
+        <button class="speed-option active" data-speed="1">1x</button>
+        <button class="speed-option" data-speed="1.5">1.5x</button>
+        <button class="speed-option" data-speed="2">2x</button>
+        <div id="navButtons" style="margin-top:10px;">
+          <button id="navChatbot" class="old-style-button" onclick="window.location.href='chatbot.html'">الدردشة</button>
+          <button id="navAbout" class="old-style-button" onclick="window.location.href='about me.html'">عني</button>
+          <button id="navVideos" class="old-style-button" onclick="window.location.href='videos.html'">فيديوهات</button>
+          <button id="navHistory" class="old-style-button" onclick="checkHistoryAccess()">سجل البحث</button>
         </div>
-    </div>
-
-    <!-- App Section -->
-    <div id="app" class="section">
-        <header>
-            <div id="top-message">Free Palestine فلسطين في القلب 🇵🇸</div>
-            <h1 id="main-title">موسوعة الحضارة المصرية</h1>
-            <p id="main-subtitle">🇪🇬 مصر - تاريخ، حضارة، وثقافة</p>
-            <div class="language-selector">
-                <label for="language" id="language-label">اختر اللغة:</label>
-                <select id="language" onchange="changeLanguage()">
-                    <option value="ar">العربية</option>
-                    <option value="en">English</option>
-                </select>
-            </div>
-        </header>
-        <main>
-            <section class="introduction">
-                <h2 id="introduction-title">لمحة عن الحضارة المصرية القديمة</h2>
-                <div class
-class="search-container">
-                    <input type="text" id="search-bar" placeholder="ابحث عن التاريخ المصري...">
-                    <button id="search-button" onclick="fetchContent()">ابحث</button>
-                </div>
-            </section>
-            <section id="content-section">
-                <!-- سيتم تحميل المعلومات هنا -->
-
-            <section class="youtube-videos" id="youtube-videos">
-                <!-- سيتم عرض فيديوهات اليوتيوب هنا -->
-            </section>
-        </main>
-        <footer>
-            <p>جميع الحقوق محفوظة &copy; 2024 - موسوعة الحضارة المصرية</p>
-        </footer>
-    </div>
-
-    <script>
-        function showSection(sectionId) {
-            document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
-            document.getElementById(sectionId).classList.add('active');
+      </div>
+      <div id="top-message">
+        <span>Free Palestine فلسطين في القلب</span>
+        <div class="flag-icons">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/0/00/Flag_of_Palestine.svg" alt="Palestine Flag">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/f/fe/Flag_of_Egypt.svg" alt="Egypt Flag">
+        </div>
+      </div>
+      <h1 id="main-title">موسوعة الحضارة المصرية</h1>
+      <p id="main-subtitle">مصر - تاريخ، حضارة، وثقافة</p>
+      <!-- Language Selector: Only Arabic and English -->
+      <div class="language-selector">
+        <label for="language" id="language-label">اختر اللغة:</label>
+        <select id="language" onchange="changeLanguage()">
+          <option value="ar">العربية</option>
+          <option value="en">English</option>
+        </select>
+      </div>
+    </header>
+    <main>
+      <section class="introduction">
+        <h2 id="introduction-title">لمحة عن الحضارة المصرية القديمة</h2>
+        <div class="search-container">
+          <input type="text" id="search-bar" placeholder="ابحث عن التاريخ المصري...">
+          <button id="search-button" class="old-style-button" onclick="fetchContent()">ابحث</button>
+          <button id="voiceSearchBtn" class="mic-icon" title="بحث صوتي">🎤</button>
+        </div>
+      </section>
+      <section id="content-section">
+        <!-- محتوى ويكيبيديا سيتم تحميله هنا -->
+      </section>
+      <!-- Search History Section -->
+      <section id="history" class="section">
+        <h2>سجل البحث</h2>
+        <input type="text" id="historyFilter" placeholder="ابحث في السجل...">
+        <ul id="historyList"></ul>
+      </section>
+    </main>
+    <footer>
+      <p>جميع الحقوق محفوظة &copy; 2024 - موسوعة الحضارة المصرية</p>
+    </footer>
+  </div>
+  
+  <script>
+    // -------------------- Global Variables and Translations --------------------
+    let fullArticleDisplayed = false;
+    let currentLanguage = 'ar';
+    let searchResults = [];
+    let speechSynthesisInstance = null;
+    let currentArticleTitle = "";
+    let currentArticleExtract = "";
+    let readerSpeed = 1;
+    const YOUTUBE_API_KEY = "AIzaSyCe3BZbOsFYE4HtHU2n1AgGqFCNORciGks";
+    const translations = {
+      ar: {
+        mainTitle: "موسوعة الحضارة المصرية",
+        mainSubtitle: "مصر - تاريخ، حضارة، وثقافة",
+        searchPlaceholder: "ابحث عن التاريخ المصري...",
+        searchButton: "ابحث",
+        readMore: "عرض المزيد",
+        readLess: "عرض أقل",
+        listenArticle: "استمع إلى المقال",
+        stopListening: "أوقف القراءة",
+        noResults: "لا توجد نتائج",
+        topBar: { app: "التطبيق", game: "اللعبة", auth: "تسجيل", highScore: "أعلى نتيجة" },
+        signupTitle: "إنشاء حساب",
+        signupMessage: "تم التسجيل بنجاح!",
+        signinTitle: "تسجيل الدخول",
+        signinMessage: "مرحبًا من جديد! تم تسجيل الدخول.",
+        logoutMessage: "أنت مسجل",
+        settingsText: "سرعة القراءة:",
+        navChatbot: "الدردشة",
+        navAbout: "عني",
+        navVideos: "فيديوهات",
+        navHistory: "سجل البحث"
+      },
+      en: {
+        mainTitle: "Egyptian Civilization Encyclopedia",
+        mainSubtitle: "Egypt - History, Civilization, and Culture",
+        searchPlaceholder: "Search for Egyptian history...",
+        searchButton: "Search",
+        readMore: "Show more",
+        readLess: "Show less",
+        listenArticle: "Listen to the article",
+        stopListening: "Stop Listening",
+        noResults: "No results found",
+        topBar: { app: "App", game: "Game", auth: "Auth", highScore: "High Score" },
+        signupTitle: "Sign Up",
+        signupMessage: "You're registered!",
+        signinTitle: "Sign In",
+        signinMessage: "Welcome back! You're signed in.",
+        logoutMessage: "You are logged in",
+        settingsText: "Reader Speed:",
+        navChatbot: "Chatbot",
+        navAbout: "About Me",
+        navVideos: "Videos",
+        navHistory: "Search History"
+      }
+    };
+    function updateLanguageTexts() {
+      const trans = translations[currentLanguage];
+      document.getElementById('main-title').textContent = trans.mainTitle;
+      document.getElementById('main-subtitle').textContent = trans.mainSubtitle;
+      document.getElementById('search-bar').placeholder = trans.searchPlaceholder;
+      document.getElementById('search-button').textContent = trans.searchButton;
+      document.getElementById('settingsText').textContent = trans.settingsText;
+      document.getElementById('btnApp').textContent = trans.topBar.app;
+      document.getElementById('btnGame').textContent = trans.topBar.game;
+      document.getElementById('btnAuth').textContent = trans.topBar.auth;
+      document.getElementById('signupTitle').textContent = trans.signupTitle;
+      document.getElementById('signupMessage').textContent = trans.signupMessage;
+      document.getElementById('signinTitle').textContent = trans.signinTitle;
+      document.getElementById('signinMessage').textContent = trans.signinMessage;
+      document.getElementById('logoutMessage').textContent = trans.logoutMessage;
+      // Update navigation buttons in settings panel
+      document.getElementById('navChatbot').textContent = trans.navChatbot;
+      document.getElementById('navAbout').textContent = trans.navAbout;
+      document.getElementById('navVideos').textContent = trans.navVideos;
+      document.getElementById('navHistory').textContent = trans.navHistory;
+      document.title = trans.mainTitle;
+    }
+    function setLanguage(lang) {
+      currentLanguage = lang;
+      localStorage.setItem('preferredLanguage', lang);
+      updateLanguageTexts();
+    }
+    
+    // -------------------- Theme Toggle --------------------
+    let isDarkTheme = false;
+    function toggleTheme() {
+      isDarkTheme = !isDarkTheme;
+      const htmlEl = document.documentElement;
+      const themeBtn = document.getElementById("themeToggle");
+      if(isDarkTheme) {
+        htmlEl.classList.add("dark-theme");
+        themeBtn.textContent = "☀️";
+      } else {
+        htmlEl.classList.remove("dark-theme");
+        themeBtn.textContent = "🌙";
+      }
+    }
+    
+    // -------------------- Search History Functions --------------------
+    function addSearchHistory(query) {
+      if(!query) return;
+      const history = JSON.parse(localStorage.getItem("searchHistory") || "[]");
+      history.push({ query: query, date: new Date().toLocaleString() });
+      localStorage.setItem("searchHistory", JSON.stringify(history));
+    }
+    function getSearchHistory() {
+      return JSON.parse(localStorage.getItem("searchHistory") || "[]");
+    }
+    function displaySearchHistory(filter = "") {
+      const historyList = document.getElementById("historyList");
+      historyList.innerHTML = "";
+      const history = getSearchHistory();
+      const filtered = history.filter(item => item.query.toLowerCase().includes(filter.toLowerCase()));
+      filtered.forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = `${item.query} - ${item.date}`;
+        li.addEventListener("click", function() {
+          document.getElementById("search-bar").value = item.query;
+          fetchContent(item.query);
+          showSection("app");
+        });
+        historyList.appendChild(li);
+      });
+    }
+    document.getElementById("historyFilter").addEventListener("input", function() {
+      displaySearchHistory(this.value);
+    });
+    function checkHistoryAccess() {
+      const user = localStorage.getItem("userName");
+      if(user) {
+        showSection("history");
+        displaySearchHistory();
+      } else {
+        showSection("auth");
+      }
+    }
+    
+    // -------------------- Auth Functions --------------------
+    function checkLoginState() {
+      const storedName = localStorage.getItem('userName');
+      const storedEmail = localStorage.getItem('userEmail');
+      if(storedName && storedEmail) {
+        document.getElementById('signupForm').style.display = 'none';
+        document.getElementById('signinForm').style.display = 'none';
+        document.getElementById('logoutOption').style.display = 'block';
+      } else {
+        document.getElementById('signupForm').style.display = 'block';
+        document.getElementById('signinForm').style.display = 'none';
+        document.getElementById('logoutOption').style.display = 'none';
+      }
+    }
+    function showSignup() {
+      document.getElementById('signupForm').style.display = 'block';
+      document.getElementById('signinForm').style.display = 'none';
+      document.getElementById('logoutOption').style.display = 'none';
+    }
+    function showSignin() {
+      document.getElementById('signupForm').style.display = 'none';
+      document.getElementById('signinForm').style.display = 'block';
+      document.getElementById('logoutOption').style.display = 'none';
+    }
+    function signup() {
+      const firstName = document.getElementById('firstname').value;
+      const lastName = document.getElementById('lastname').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const confirmPassword = document.getElementById('confirmPassword').value;
+      if (password !== confirmPassword) {
+        alert(currentLanguage === 'en' ? "Passwords do not match!" : "كلمات المرور غير متطابقة!");
+        return;
+      }
+      const userName = firstName + " " + lastName;
+      localStorage.setItem('userName', userName);
+      localStorage.setItem('userEmail', email);
+      alert(translations[currentLanguage].signupMessage);
+      document.getElementById('signupForm').style.display = 'none';
+      document.getElementById('signinForm').style.display = 'none';
+      document.getElementById('logoutOption').style.display = 'block';
+    }
+    function signin() {
+      const email = document.getElementById('signinEmail').value;
+      const password = document.getElementById('signinPassword').value;
+      if (password.trim() === '') {
+        alert(currentLanguage === 'en' ? "Please enter your password!" : "الرجاء إدخال كلمة المرور!");
+        return;
+      }
+      const storedEmail = localStorage.getItem('userEmail');
+      if(email === storedEmail) {
+        alert(translations[currentLanguage].signinMessage);
+        document.getElementById('signupForm').style.display = 'none';
+        document.getElementById('signinForm').style.display = 'none';
+        document.getElementById('logoutOption').style.display = 'block';
+      } else {
+        alert(currentLanguage === 'en' ? "User not found!" : "المستخدم غير موجود!");
+      }
+    }
+    function logout() {
+      alert(currentLanguage === 'en' ? "Logged out!" : "لقد تم تسجيل الخروج!");
+      document.getElementById('logoutOption').style.display = 'none';
+      localStorage.removeItem('userName');
+      localStorage.removeItem('userEmail');
+      document.getElementById('userInfo').innerHTML = "";
+      showSignin();
+    }
+    
+    // -------------------- Chat Functions --------------------
+    const chatContainer = document.getElementById('chat-container');
+    let currentAbortController = null;
+    let lastUserMessage = '';
+    let chats = [];
+    let currentChatId = null;
+    function saveChats() { localStorage.setItem('chats', JSON.stringify(chats)); }
+    function loadChats() {
+      const stored = localStorage.getItem('chats');
+      chats = stored ? JSON.parse(stored) : [];
+    }
+    function updateChatList() {
+      const chatListEl = document.getElementById('chat-list');
+      chatListEl.innerHTML = '';
+      chats.forEach(chat => {
+        const li = document.createElement('li');
+        li.className = 'chat-list-item';
+        if(chat.id === currentChatId) li.classList.add('active');
+        li.innerHTML = `<span class="chat-title">${chat.title}</span>
+                        <button class="rename-chat" title="إعادة التسمية">
+                          <svg class="icon"><use xlink:href="#icon-gear"></use></svg>
+                        </button>
+                        <button class="close-chat" title="إغلاق الدردشة">
+                          <svg class="icon"><use xlink:href="#icon-close"></use></svg>
+                        </button>`;
+        li.addEventListener('click', (e) => { 
+          if(e.target.closest('.close-chat') || e.target.closest('.rename-chat')) return; 
+          switchChat(chat.id); 
+        });
+        li.querySelector('.close-chat').addEventListener('click', (e) => { e.stopPropagation(); deleteChat(chat.id); });
+        li.querySelector('.rename-chat').addEventListener('click', (e) => { 
+          e.stopPropagation(); 
+          let newName = prompt("أدخل الاسم الجديد:", chat.title);
+          if(newName) { chat.title = newName; saveChats(); updateChatList(); }
+        });
+        chatListEl.appendChild(li);
+      });
+    }
+    function switchChat(chatId) {
+      currentChatId = chatId;
+      const chat = chats.find(c => c.id === chatId);
+      chatContainer.innerHTML = '';
+      if(chat && chat.conversation) {
+        chat.conversation.forEach(entry => { appendMessage(entry.role, entry.message, false, false); });
+      }
+      updateChatList();
+    }
+    function deleteChat(chatId) {
+      chats = chats.filter(c => c.id !== chatId);
+      if(currentChatId === chatId) {
+        if(chats.length) { currentChatId = chats[0].id; switchChat(currentChatId); }
+        else { currentChatId = null; chatContainer.innerHTML = ''; }
+      }
+      saveChats(); updateChatList();
+    }
+    function newChat() {
+      let chatName = prompt("أدخل اسم الدردشة:", `دردشة ${chats.length + 1}`);
+      if(!chatName) chatName = `دردشة ${chats.length + 1}`;
+      const chatId = 'chat-' + Date.now();
+      const chat = { id: chatId, title: chatName, conversation: [] };
+      chats.push(chat);
+      currentChatId = chatId;
+      saveChats(); updateChatList();
+      chatContainer.innerHTML = '';
+    }
+    loadChats();
+    if(chats.length === 0) { newChat(); } else { currentChatId = chats[0].id; switchChat(currentChatId); }
+    function appendMessage(role, message, isLoading = false, save = true) {
+      const rowDiv = document.createElement('div');
+      rowDiv.classList.add('message-row', `message-${role}`);
+      const contentDiv = document.createElement('div');
+      contentDiv.classList.add('message-content');
+      if(isLoading) {
+        contentDiv.innerHTML = `<div class="typing-indicator">
+                                  <div class="dot"></div>
+                                  <div class="dot"></div>
+                                  <div class="dot"></div>
+                                </div>`;
+      } else {
+        if(role === 'user') {
+          contentDiv.innerText = message;
+        } else {
+          const rendered = marked.parse(message);
+          contentDiv.innerHTML = rendered;
+          contentDiv.querySelectorAll('pre code').forEach((block) => {
+            hljs.highlightElement(block);
+          });
         }
-
-        // Show Signup Form
-function showSignup() {
-    document.getElementById('signupForm').style.display = 'block';
-    document.getElementById('signinForm').style.display = 'none';
-    document.getElementById('logoutOption').style.display = 'none';
-}
-
-// Show Signin Form
-function showSignin() {
-    document.getElementById('signupForm').style.display = 'none';
-    document.getElementById('signinForm').style.display = 'block';
-    document.getElementById('logoutOption').style.display = 'none';
-}
-
-// Signup functionality
-function signup() {
-    // Get the values from the signup form
-    const firstname = document.getElementById('firstname').value;
-    const lastname = document.getElementById('lastname').value;
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    const confirmPassword = document.getElementById('confirmPassword').value;
-
-    // Check if passwords match
-    if (password !== confirmPassword) {
-        alert('Passwords do not match!');
-        return;
+      }
+      rowDiv.appendChild(contentDiv);
+      chatContainer.appendChild(rowDiv);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
+      if(save) {
+        const chat = chats.find(c => c.id === currentChatId);
+        if(chat) { chat.conversation.push({ role, message }); saveChats(); }
+      }
     }
-
-    // Simple email validation
-    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    if (!emailPattern.test(email)) {
-        alert('Please enter a valid email address!');
-        return;
+    function clearChat() {
+      const chat = chats.find(c => c.id === currentChatId);
+      if(chat) { chat.conversation = []; saveChats(); }
+      chatContainer.innerHTML = '';
     }
-
-    // Simulate successful signup
-    alert('Registration successful!');
-    document.getElementById('signupForm').style.display = 'none';
-    document.getElementById('logoutOption').style.display = 'block';
-}
-
-// Signin functionality
-function signin() {
-    // Get the values from the signin form
-    const email = document.getElementById('signinEmail').value;
-    const password = document.getElementById('signinPassword').value;
-
-    // Simple email validation
-    const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    if (!emailPattern.test(email)) {
-        alert('Please enter a valid email address!');
-        return;
+    function exportChat() {
+      const chat = chats.find(c => c.id === currentChatId);
+      if(chat) {
+        const text = chat.conversation.map(entry => `${entry.role.toUpperCase()}: ${entry.message}`).join('\n\n');
+        const blob = new Blob([text], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${chat.title.replace(/\s/g, '_')}.txt`;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
     }
-
-    // Simple password validation (check if it's not empty)
-    if (password.trim() === '') {
-        alert('Please enter a password!');
-        return;
+    function listenText(text) {
+      if(speechSynthesis.speaking) { speechSynthesis.cancel(); return; }
+      const utterance = new SpeechSynthesisUtterance(text);
+      const speed = document.querySelector('.speed-option.active').getAttribute('data-speed');
+      utterance.rate = parseFloat(speed);
+      utterance.lang = currentLanguage === 'ar' ? 'ar-EG' : 'en-US';
+      window.speechSynthesis.speak(utterance);
     }
-
-    // Simulate successful signin
-    alert('Login successful!');
-    document.getElementById('signinForm').style.display = 'none';
-    document.getElementById('logoutOption').style.display = 'block';
-}
-
-// Logout functionality
-function logout() {
-    alert('You have logged out!');
-    document.getElementById('logoutOption').style.display = 'none';
-    showSignin(); // Go back to signin screen after logout
-}
-    </script>
+    function runCode(code) {
+      if(code.toLowerCase().includes("<html")) {
+         document.getElementById('code-content').innerText = code;
+         document.getElementById('code-modal').classList.add('active');
+      } else {
+         alert('الكود المقدم لا يحتوي على HTML.');
+      }
+    }
+    document.getElementById('modal-close').addEventListener('click', () => {
+      document.getElementById('code-modal').classList.remove('active');
+    });
+    document.getElementById('copy-code').addEventListener('click', () => {
+      const codeText = document.getElementById('code-content').innerText;
+      navigator.clipboard.writeText(codeText).then(() => { alert('تم نسخ الكود!'); });
+    });
+    document.getElementById('run-code').addEventListener('click', () => {
+      const codeText = document.getElementById('code-content').innerText;
+      let newWin = window.open("", "_blank", "width=800,height=600");
+      newWin.document.write(codeText);
+      newWin.document.close();
+    });
+    document.getElementById('open-tab').addEventListener('click', () => {
+      const codeText = document.getElementById('code-content').innerText;
+      let newTab = window.open();
+      newTab.document.write(codeText);
+      newTab.document.close();
+    });
+    async function callGeminiAPI(prompt) {
+      lastUserMessage = prompt;
+      const API_KEY = 'AIzaSyC-REQ0WAsmc0288A9jyEeorMNxVJSuY7I';
+      const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+      const payload = { contents: [{ parts: [{ text: prompt }] }] };
+      currentAbortController = new AbortController();
+      try {
+        appendMessage('bot', '', true, false);
+        const response = await fetch(API_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          signal: currentAbortController.signal
+        });
+        const data = await response.json();
+        let botReply = '';
+        if(data.candidates && data.candidates.length > 0 && data.candidates[0].content && data.candidates[0].content.parts) {
+          botReply = data.candidates[0].content.parts.map(part => part.text).join('');
+        } else { botReply = 'لم يتم استلام رد صالح.'; }
+        const messages = chatContainer.getElementsByClassName('message-row');
+        if(messages.length) {
+          const lastMsg = messages[messages.length - 1];
+          if(lastMsg.querySelector('.typing-indicator')) { lastMsg.remove(); }
+        }
+        appendMessage('bot', botReply.trim());
+      } catch(error) {
+        console.error('خطأ في استدعاء Gemini API:', error);
+        let errorMsg = error.name === 'AbortError' ? 'تم إيقاف التوليد.' : error.message.includes("Failed to fetch") ? "خطأ في الشبكة: لا يمكن الوصول إلى الـ API." : 'خطأ: ' + error.message;
+        appendMessage('bot', errorMsg);
+      } finally {
+        currentAbortController = null;
+      }
+    }
+    function sendMessage() {
+      const text = userInput.value.trim();
+      if(!text) return;
+      appendMessage('user', text);
+      userInput.value = '';
+      callGeminiAPI(text);
+      addSearchHistory(text);
+    }
+    
+    // -------------------- Speech Recognition --------------------
+    const micBtn = document.getElementById('mic-btn');
+    if('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      recognition = new SpeechRecognition();
+      recognition.lang = currentLanguage === 'ar' ? 'ar-EG' : 'en-US';
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+      recognition.onstart = () => { micBtn.classList.add('listening'); };
+      recognition.onend = () => { micBtn.classList.remove('listening'); };
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        document.getElementById('search-bar').value = transcript;
+        fetchContent(transcript);
+      };
+      recognition.onerror = (event) => { console.error('خطأ في التعرف على الصوت', event.error); };
+    } else {
+      micBtn.style.display = 'none';
+    }
+    micBtn.addEventListener('click', () => { if(recognition) recognition.start(); });
+    
+    // -------------------- Settings Panel --------------------
+    document.getElementById('settingsToggle').addEventListener('click', function(e){
+      e.stopPropagation();
+      toggleSettingsPanel();
+    });
+    document.addEventListener('keydown', (e) => {
+      if(e.shiftKey && e.key.toLowerCase() === 's') {
+        e.preventDefault();
+        toggleSettingsPanel();
+      }
+    });
+    document.addEventListener('click', (e) => {
+      const panel = document.getElementById('settingsPanel');
+      if(panel.style.display === 'block' && !e.target.closest('#settingsPanel') && !e.target.closest('#settingsToggle')) {
+        panel.style.display = 'none';
+      }
+    });
+    // -------------------- Sidebar Toggle --------------------
+    const leftSidebar = document.getElementById('left-sidebar');
+    const sidebarToggle = document.getElementById('sidebar-toggle');
+    const sidebarOverlay = document.getElementById('sidebar-overlay');
+    sidebarToggle.addEventListener('click', () => {
+      if(window.innerWidth < 769) {
+        leftSidebar.classList.toggle('active');
+        sidebarOverlay.classList.toggle('active');
+      } else {
+        leftSidebar.classList.toggle('collapsed');
+      }
+    });
+    document.getElementById('sidebar-close').addEventListener('click', () => {
+      leftSidebar.classList.remove('active');
+      sidebarOverlay.classList.remove('active');
+    });
+    sidebarOverlay.addEventListener('click', () => {
+      leftSidebar.classList.remove('active');
+      sidebarOverlay.classList.remove('active');
+    });
+    
+    // -------------------- Chat Navigation --------------------
+    document.getElementById('new-chat').addEventListener('click', newChat);
+    document.getElementById('chat-search-input').addEventListener('input', () => {
+      const query = document.getElementById('chat-search-input').value.toLowerCase();
+      document.querySelectorAll('.chat-list-item').forEach(item => {
+        const title = item.querySelector('.chat-title').innerText.toLowerCase();
+        item.style.display = title.includes(query) ? '' : 'none';
+      });
+    });
+    document.getElementById('clear-chat').addEventListener('click', clearChat);
+    document.getElementById('export-chat').addEventListener('click', exportChat);
+    document.getElementById('stop-gen').addEventListener('click', () => { if(currentAbortController) currentAbortController.abort(); });
+    document.getElementById('regenerate').addEventListener('click', () => { if(lastUserMessage) callGeminiAPI(lastUserMessage); });
+    document.getElementById('listen-result').addEventListener('click', () => {
+      const botMessages = document.querySelectorAll('.message-row.message-bot .message-content');
+      if(botMessages.length > 0) {
+        const lastMessage = botMessages[botMessages.length - 1];
+        const text = lastMessage.innerText || lastMessage.textContent;
+        listenText(text);
+      }
+    });
+    document.getElementById('home-btn').addEventListener('click', () => {
+      window.location.href = "index.html";
+    });
+    
+    // -------------------- Language Selector (Only Arabic & English) --------------------
+    const languageOptions = document.createElement('div');
+    languageOptions.style.margin = "10px 0";
+    languageOptions.innerHTML = `<button class="old-style-button language-option" data-lang="ar">العربية</button>
+                                 <button class="old-style-button language-option" data-lang="en">English</button>`;
+    document.querySelector('header').appendChild(languageOptions);
+    document.querySelectorAll('.language-option').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        const lang = this.getAttribute('data-lang');
+        setLanguage(lang);
+        e.stopPropagation();
+      });
+    });
+    
+    // -------------------- Input Area --------------------
+    sendBtn.addEventListener('click', sendMessage);
+    userInput.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+    
+    // -------------------- Settings Panel Toggle Function --------------------
+    function toggleSettingsPanel() {
+      const panel = document.getElementById('settingsPanel');
+      panel.style.display = (panel.style.display === 'block') ? 'none' : 'block';
+      if(panel.style.display === 'block') {
+        const userInfo = document.getElementById('userInfo');
+        const storedName = localStorage.getItem('userName');
+        const storedEmail = localStorage.getItem('userEmail');
+        userInfo.innerHTML = (storedName && storedEmail) ? `<p>${storedName} - ${storedEmail}</p>` : '';
+      }
+    }
+    
+    // -------------------- Set Initial States --------------------
+    updateLanguageTexts();
+    const storedTheme = localStorage.getItem('preferredTheme') || 'light';
+    document.body.setAttribute('data-theme', storedTheme);
+    if(storedTheme === 'light') {
+      document.getElementById('themeToggle').textContent = "🌙";
+    } else {
+      document.getElementById('themeToggle').textContent = "☀️";
+    }
+    if(recognition) {
+      recognition.lang = currentLanguage === 'ar' ? 'ar-EG' : 'en-US';
+    }
+  </script>
 </body>
 </html>
